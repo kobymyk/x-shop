@@ -1,16 +1,17 @@
 package com.study.onlineshop.security;
 
-import com.study.onlineshop.entity.Product;
 import com.study.onlineshop.entity.User;
 
+
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.EnumSet;
+
 
 public class Session {
     private String token;
     private User user;
     private LocalDateTime expireDate;
-    private List<Product> cart;
+    //private List<Product> cart;
 
     public LocalDateTime getExpireDate() {
         return expireDate;
@@ -34,5 +35,9 @@ public class Session {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean hasRole(EnumSet roles) {
+        return roles.contains(this.user.getUserRole());
     }
 }

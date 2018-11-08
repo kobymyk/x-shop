@@ -2,12 +2,11 @@ package com.study.onlineshop.security;
 
 import com.study.onlineshop.entity.User;
 import com.study.onlineshop.service.UserService;
-import com.study.onlineshop.service.impl.DefaultUserService;
 
-import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SecurityService {
@@ -42,29 +41,18 @@ public class SecurityService {
             }
         }
     }
-
-    public Session getSession(String token) {
+    // Optional
+    public Optional<Session> getSession(String token) {
         for (Session session : sessionList) {
             if (session.getToken().equals(token)) {
                 // check if not expired
                 if (session.getExpireDate().isBefore(LocalDateTime.now())) {
                     sessionList.remove(session);
-                    return null;
+                    return Optional.empty();
                 }
-                return session;
+                return Optional.of(session);
             }
         }
-        return null;
-    }
-    // service
-    public String getToken(Cookie[] cookies) {
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token")) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
+        return Optional.empty();
     }
 }

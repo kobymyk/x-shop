@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.Optional;
 
 public class UserRoleSecurityFilter implements Filter {
     private SecurityService securityService;
@@ -27,13 +28,11 @@ public class UserRoleSecurityFilter implements Filter {
         Cookie[] cookies = httpServletRequest.getCookies();
         boolean isAuth = false;
 
-        String token = securityService.getToken(cookies);
-        // not good
-        Session session = securityService.getSession(token);
-        if (session != null) {
-            if (EnumSet.of(UserRole.ADMIN, UserRole.USER).contains(session.getUser().getUserRole())) {
-                isAuth = true;
-            }
+        Optional<Session> sessionOptional = securityService.getSession(UserToken.getToken(cookies));
+        if (sessionOptional.isPresent()) {
+            Session session = sessionOptional.get();
+            //if (session != null) {
+            isAuth = session.hasRole(EnumSet.of(UserRole.ADMIN, UserRole.USER));
         }
 
         if (isAuth) {

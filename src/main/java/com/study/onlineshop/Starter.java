@@ -19,6 +19,7 @@ import javax.servlet.DispatcherType;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.Properties;
 
 public class Starter {
@@ -30,13 +31,14 @@ public class Starter {
             properties.load(stream);
         }
         // config connections
+        Locale.setDefault(Locale.ENGLISH); // XE limitation
         LocaleConnection defaultConnection = OwnerConnection.getInstance(properties);
         LocaleConnection userConnection = OwnerConnection.getInstance(properties);
         // configure daos
         ProductDao productDb = new ProductDb();
-        ((ProductDb) productDb).setConnection(defaultConnection.getConnection());
         UserDao userDb = new UserDb();
-        ((UserDb) userDb).setConnection(userConnection.getConnection());
+        productDb.setDataSource(defaultConnection.getDataSource());
+        userDb.setDataSource(userConnection.getDataSource());
         // configure services
         DefaultProductService productService = new DefaultProductService(productDb);
         DefaultUserService userService = new DefaultUserService(userDb);

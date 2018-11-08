@@ -4,12 +4,14 @@ import com.study.onlineshop.dao.UserDao;
 import com.study.onlineshop.dao.jdbc.mapper.UserRowMapper;
 import com.study.onlineshop.entity.User;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDb implements UserDao {
-    private Connection connection;
+public class UserDb implements UserDao/*, Persistent*/ {
+    private DataSource dataSource;
+
     private static final String SELECT_ALL = "SELECT * FROM users";
     private static final String FETCH_BY_LOGIN = "SELECT * FROM users t where t.login = ?";
 
@@ -17,7 +19,8 @@ public class UserDb implements UserDao {
 
     @Override
     public List<User> getAll() {
-        try (Statement statement = connection.createStatement();
+        try (Connection connection = dataSource.getConnection();
+                Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL)) {
 
             List<User> users = new ArrayList<>();
@@ -33,12 +36,15 @@ public class UserDb implements UserDao {
         }
     }
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    @Override
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
+
     @Override
     public User getByName(String name) {
-        try (PreparedStatement statement = connection.prepareStatement(FETCH_BY_LOGIN)) {
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FETCH_BY_LOGIN)) {
 
             User user = null;
             statement.setString(1, name);

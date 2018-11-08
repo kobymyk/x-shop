@@ -4,8 +4,8 @@ import com.study.onlineshop.entity.User;
 
 import java.util.List;
 
-public interface UserDao {
-    List<User> getAll();
+public interface UserDao extends Persistent {
+    //List<User> getAll();
 
     User getByName(String name);
 }

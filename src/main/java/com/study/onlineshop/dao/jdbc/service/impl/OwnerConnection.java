@@ -3,9 +3,6 @@ package com.study.onlineshop.dao.jdbc.service.impl;
 import com.study.onlineshop.dao.jdbc.service.LocaleConnection;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Properties;
 
 public class OwnerConnection implements LocaleConnection {
@@ -28,9 +25,8 @@ public class OwnerConnection implements LocaleConnection {
         return ConnectionHolder.INSTANCE;
     }
 
-    public Connection getConnection() throws SQLException  {
-        Locale.setDefault(DEFAULT_LOCALE);
-        return ConnectionHolder.INSTANCE.dataSource.getConnection();
+    public BasicDataSource getDataSource()  {
+        return ConnectionHolder.INSTANCE.dataSource;
     }
 
     private static class ConnectionHolder {

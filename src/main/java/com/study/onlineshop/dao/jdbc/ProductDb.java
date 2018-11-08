@@ -4,25 +4,24 @@ import com.study.onlineshop.dao.*;
 import com.study.onlineshop.dao.jdbc.mapper.ProductRowMapper;
 import com.study.onlineshop.entity.Product;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//ProductDao
+//ProductDao impl
 public class ProductDb implements ProductDao {
-    private Connection connection;
+    private DataSource dataSource;
 
     private static final String SELECT_ALL = "SELECT * FROM product";
     private static final String FETCH_RAW = "SELECT * FROM product t WHERE t.id = ?";
 
     private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
     @Override
     public List<Product> getAll() {
-        try (Statement statement = connection.createStatement();
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL)) {
 
 
@@ -40,8 +39,14 @@ public class ProductDb implements ProductDao {
     }
 
     @Override
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Override
     public Product getUnique(int id) {
-        try (PreparedStatement statement = connection.prepareStatement(FETCH_RAW)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FETCH_RAW)) {
 
             Product product = new Product();
             statement.setInt(1, id);

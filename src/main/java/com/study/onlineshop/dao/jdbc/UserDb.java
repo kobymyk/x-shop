@@ -37,6 +37,11 @@ public class UserDb implements UserDao/*, Persistent*/ {
     }
 
     @Override
+    public int update(Object version) {
+        return 0;
+    }
+
+    @Override
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }

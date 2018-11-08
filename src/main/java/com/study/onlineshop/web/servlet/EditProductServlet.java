@@ -31,8 +31,12 @@ public class EditProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // if validate(request)
-        //int id = request.getParameter("id");
-        //productService.update(id);
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("id", request.getParameter("id"));
+        parameters.put("name", request.getParameter("name"));
+        //parameters.put("price", request.getParameter("price"));
+
+        productService.update(parameters);
         response.sendRedirect("/products");
     }
 

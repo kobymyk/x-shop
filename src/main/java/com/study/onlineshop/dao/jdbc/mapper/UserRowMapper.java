@@ -6,7 +6,7 @@ import com.study.onlineshop.entity.UserRole;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserRowMapper implements RawMapper {
+public class UserRowMapper implements RowMapper {
     @Override
     public User mapRow(ResultSet resultSet) throws SQLException {
         User user = new User();
@@ -14,8 +14,7 @@ public class UserRowMapper implements RawMapper {
         user.setId(resultSet.getInt("id"));
         user.setLogin(resultSet.getString("login"));
         user.setPassword(resultSet.getString("password"));
-        // enum
-        user.setUserRole(UserRole.USER); //resultSet.getString("user_role"));
+        user.setUserRole(UserRole.valueOf(resultSet.getString("user_role")));
         user.setSole(resultSet.getString("sole"));
 
         return user;

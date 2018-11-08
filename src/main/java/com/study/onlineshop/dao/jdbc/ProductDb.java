@@ -14,7 +14,8 @@ public class ProductDb implements ProductDao {
     private DataSource dataSource;
 
     private static final String SELECT_ALL = "SELECT * FROM product";
-    private static final String FETCH_RAW = "SELECT * FROM product t WHERE t.id = ?";
+    private static final String FETCH_ROW = "SELECT * FROM product t WHERE t.id = ?";
+    private static final String UPDATE_ROW = "UPDATE product t SET t.name = ? WHERE t.id = ?";
 
     private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
 
@@ -46,7 +47,7 @@ public class ProductDb implements ProductDao {
     @Override
     public Product getUnique(int id) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FETCH_RAW)) {
+             PreparedStatement statement = connection.prepareStatement(FETCH_ROW)) {
 
             Product product = new Product();
             statement.setInt(1, id);
@@ -58,6 +59,22 @@ public class ProductDb implements ProductDao {
             }
 
             return product;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int update(Object version) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ROW)) {
+
+            Product product = (Product) version;
+            statement.setString(1, product.getName());
+            statement.setInt(2, product.getId());
+
+            return statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

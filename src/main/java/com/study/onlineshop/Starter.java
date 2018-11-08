@@ -59,7 +59,7 @@ public class Starter {
         servletContextHandler.addServlet(new ServletHolder(editServlet), "/product-edit");
         // filters
         FilterHolder userRoleFilterHolder = new FilterHolder(new UserRoleSecurityFilter(securityService));
-        FilterHolder adminRoleFilterHolder = new FilterHolder(new UserRoleSecurityFilter(securityService));
+        FilterHolder adminRoleFilterHolder = new FilterHolder(new AdminRoleSecurityFilter(securityService));
         EnumSet requestEnumSet = EnumSet.of(DispatcherType.REQUEST);
         servletContextHandler.addFilter(userRoleFilterHolder, "/products", requestEnumSet);
         servletContextHandler.addFilter(adminRoleFilterHolder, "/product-edit", requestEnumSet);

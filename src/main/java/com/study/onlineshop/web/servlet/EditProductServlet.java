@@ -4,27 +4,26 @@ import com.study.onlineshop.entity.Product;
 import com.study.onlineshop.service.ProductService;
 import com.study.onlineshop.web.templater.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.HashMap;
 
 public class EditProductServlet extends HttpServlet {
+    private static final String PKEY = "id";
     private ProductService productService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        int id = Integer.parseInt(request.getParameter("id"));
         PageGenerator pageGenerator = PageGenerator.instance();
-        Product product = productService.getScalar(id);
+        Product product = productService.getScalar(PKEY, request.getParameter(PKEY));
 
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("product", product);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("product", product);
 
-        String page = pageGenerator.getPage("product-edit", parameters);
+        String page = pageGenerator.getPage("product-edit", data);
         response.getWriter().write(page);
     }
 

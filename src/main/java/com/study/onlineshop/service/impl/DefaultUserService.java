@@ -13,6 +13,7 @@ public class DefaultUserService implements UserService {
     public DefaultUserService(UserDao userDb) {
         this.userDb = userDb;
     }
+
     private String encrypt(String word) {
         MessageDigest crypt = null;
         try {
@@ -28,8 +29,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User getUser(String name, String password) {
-        User user = userDb.getByName(name);
+    public User getUser(String login, String password) {
+        User user = userDb.getByName(login);
         if (user != null) {
             String cryptPassword = encrypt(password + user.getSole());
 

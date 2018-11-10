@@ -13,13 +13,13 @@
 </head>
 <body>
 <div class="container">
-    <h1>Product Id ${product.id}</h1>
+    <h1>ProductId : ${product.id}</h1>
     <form action="product-edit" method="POST">
         <div class="row">
             <div class="controls">
                 <input type="hidden" id="id" name="id" value="${product.id}">
-                Product name: <input type="text" id="name" name="name" value="${product.name}">
-                Price: <input type="number" step="any" id="price" name="price" value="${product.price}">
+                ProductName : <input type="text" id="name" name="name" value="${product.name}">
+                Price : <input type="number" step="any" id="price" name="price" value="${product.price}">
                 <a href="/products"> Cancel </a>
                 <input type="submit" value="Save changes">
             </div>

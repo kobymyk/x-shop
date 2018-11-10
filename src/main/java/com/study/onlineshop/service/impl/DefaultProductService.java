@@ -20,16 +20,19 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public void update(HashMap<String, String> parameters) {
+    public void update(HashMap<String, String> params) {
         Product product = new Product();
-        product.setId(Integer.parseInt(parameters.get("id")));
-        product.setName(parameters.get("name"));
+        product.setId(Integer.parseInt(params.get("id")));
+        product.setName(params.get("name"));
 
         productDao.update(product);
     }
 
     @Override
-    public Product getScalar(int id) {
-        return productDao.getUnique(id);
+    public Product getScalar(String paramName, String paramValue) {
+        if ("id".equals(paramName)) {
+            return productDao.getUnique(Integer.parseInt(paramValue));
+        }
+        throw new RuntimeException("Invalid paramName");
     }
 }

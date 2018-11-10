@@ -4,14 +4,11 @@ import com.study.onlineshop.security.SecurityService;
 import com.study.onlineshop.security.Session;
 import com.study.onlineshop.web.templater.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 public class LoginServlet extends HttpServlet {
     private SecurityService securityService;
@@ -21,28 +18,27 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PageGenerator pageGenerator = PageGenerator.instance();
-        HashMap<String, Object> parameters = new HashMap<>();
+        //HashMap<String, Object> data = new HashMap<>();
 
-        String page = pageGenerator.getPage("login", parameters);
-        resp.getWriter().write(page);
+        String page = pageGenerator.getPage("login", null);
+        response.getWriter().write(page);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-        //System.out.println(login + " : " + password);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
 
         Session session = securityService.login(login, password);
         if (session != null) {
             Cookie cookie = new Cookie("user-token", session.getToken());
             cookie.setMaxAge(60 * 60 * 5);
-            resp.addCookie(cookie);
-            resp.sendRedirect("/products");
+            response.addCookie(cookie);
+            response.sendRedirect("/products");
         } else {
-            resp.sendRedirect("/login");
+            response.sendRedirect("/login");
         }
     }
 }

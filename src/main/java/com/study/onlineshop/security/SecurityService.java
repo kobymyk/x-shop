@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class SecurityService {
+    // should be concurrent one
     private List<Session> sessionList = new ArrayList<>();
-
     private UserService userService;
 
     public SecurityService(UserService userService) {

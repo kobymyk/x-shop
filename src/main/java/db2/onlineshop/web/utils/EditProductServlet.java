@@ -1,4 +1,4 @@
-package db2.onlineshop.web.servlet;
+package db2.onlineshop.web.utils;
 
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;

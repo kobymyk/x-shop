@@ -14,7 +14,7 @@
     <context:component-scan base-package="db2.onlineshop.controller"/>
     <mvc:annotation-driven/>
 
-    <bean id="productService" class="db2.onlineshop.service.impl.DefaultProductService">
+    <bean id="productService" class="db2.onlineshop.service.impl.BasicProductService">
         <constructor-arg ref="productDb"/>
     </bean>
 
@@ -24,7 +24,7 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin://localhost:1521/XE"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521/XE"/>
         <property name="username" value="db2_owner"/>
         <property name="password" value="db2"/>
     </bean>

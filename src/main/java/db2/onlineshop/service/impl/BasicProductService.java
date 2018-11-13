@@ -7,10 +7,10 @@ import db2.onlineshop.service.ProductService;
 import java.util.HashMap;
 import java.util.List;
 
-public class DefaultProductService implements ProductService {
+public class BasicProductService implements ProductService {
     private ProductDao productDao;
 
-    public DefaultProductService(ProductDao productDao) {
+    public BasicProductService(ProductDao productDao) {
         this.productDao = productDao;
     }
 

@@ -1,34 +1,30 @@
-package db2.onlineshop.web.servlet;
+package db2.onlineshop.web.utils;
 
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
-import db2.onlineshop.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
-public class ProductsServlet extends HttpServlet {
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class ProductsApiServlet extends HttpServlet {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private ProductService productService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //if (isAuth) -> moved to filter
-        PageGenerator pageGenerator = PageGenerator.instance();
         List<Product> products = productService.getAll();
-
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("products", products);
-
-        String page = pageGenerator.getPage("products", data);
-        resp.getWriter().write(page);
+        // products -> json
+        String json = OBJECT_MAPPER.writeValueAsString(products);
+        resp.getWriter().write(json);
     }
 
-    public void setProductService(ProductService productService) {
+    public ProductsApiServlet(ProductService productService) {
         this.productService = productService;
     }
 }

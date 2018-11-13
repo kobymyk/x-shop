@@ -4,25 +4,22 @@ import db2.onlineshop.dao.ProductDao;
 import db2.onlineshop.dao.UserDao;
 import db2.onlineshop.dao.jdbc.ProductDb;
 import db2.onlineshop.dao.jdbc.UserDb;
-import db2.onlineshop.service.impl.DefaultProductService;
-import db2.onlineshop.service.impl.DefaultUserService;
-import db2.onlineshop.web.filter.AdminRoleSecurityFilter;
-import db2.onlineshop.web.filter.UserRoleSecurityFilter;
-import db2.onlineshop.web.servlet.EditProductServlet;
-import db2.onlineshop.web.servlet.LoginServlet;
-import db2.onlineshop.web.servlet.ProductsServlet;
+import db2.onlineshop.service.impl.BasicProductService;
+import db2.onlineshop.service.impl.BasicUserService;
+import db2.onlineshop.web.utils.EditProductServlet;
+import db2.onlineshop.web.utils.LoginServlet;
+import db2.onlineshop.web.utils.ProductsServlet;
 import db2.onlineshop.dao.jdbc.service.LocaleConnection;
 import db2.onlineshop.dao.jdbc.service.impl.OwnerConnection;
 import db2.onlineshop.security.SecurityService;
 /*
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.utils.FilterHolder;
+import org.eclipse.jetty.utils.ServletContextHandler;
+import org.eclipse.jetty.utils.ServletHolder;
 */
-//import javax.servlet.DispatcherType;
+//import javax.utils.DispatcherType;
 import java.io.InputStream;
-import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -44,8 +41,8 @@ public class Starter {
         productDb.setDataSource(defaultConnection.getDataSource());
         userDb.setDataSource(userConnection.getDataSource());
         // configure services
-        DefaultProductService productService = new DefaultProductService(productDb);
-        DefaultUserService userService = new DefaultUserService(userDb);
+        BasicProductService productService = new BasicProductService(productDb);
+        BasicUserService userService = new BasicUserService(userDb);
         SecurityService securityService = new SecurityService(userService);
         // servlets
         ProductsServlet productsServlet = new ProductsServlet();

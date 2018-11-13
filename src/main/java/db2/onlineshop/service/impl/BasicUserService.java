@@ -7,10 +7,10 @@ import db2.onlineshop.entity.User;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
-public class DefaultUserService implements UserService {
+public class BasicUserService implements UserService {
     private UserDao userDb;
 
-    public DefaultUserService(UserDao userDb) {
+    public BasicUserService(UserDao userDb) {
         this.userDb = userDb;
     }
 

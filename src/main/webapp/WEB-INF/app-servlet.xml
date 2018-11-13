@@ -17,13 +17,16 @@
     <bean id="productService" class="db2.onlineshop.service.impl.DefaultProductService">
         <constructor-arg ref="productDb"/>
     </bean>
+
     <bean id="productDb" class="db2.onlineshop.dao.jdbc.ProductDb">
         <property name = "dataSource" ref="dataSource"/>
     </bean>
-    <bean id="dataSource" class="com.oracle.jdbc.pool.OracleDataSource">
-        <property name = "url" value="jdbc:oracle:thin://localhost:1521/XE"/>
-        <property name = "user" value="db2_owner"/>
-        <property name = "password" value="db2"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin://localhost:1521/XE"/>
+        <property name="username" value="db2_owner"/>
+        <property name="password" value="db2"/>
     </bean>
 
 </beans>

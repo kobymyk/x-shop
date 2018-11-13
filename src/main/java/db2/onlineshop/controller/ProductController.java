@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Controller
 public class ProductController {
-    @Autowired
+    //@Autowired
     private ProductService productService;
 
     private static final PageGenerator PAGE_GENERATOR = PageGenerator.instance();

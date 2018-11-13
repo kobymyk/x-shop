@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="db2.onlineshop.controller"/>
+    <mvc:annotation-driven/>
+
+    <bean id="productService" class="db2.onlineshop.service.impl.DefaultProductService">
+        <constructor-arg ref="productDb"/>
+    </bean>
+    <bean id="productDb" class="db2.onlineshop.dao.jdbc.ProductDb">
+        <property name = "dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="dataSource" class="com.oracle.jdbc.pool.OracleDataSource">
+        <property name = "url" value="jdbc:oracle:thin://localhost:1521/XE"/>
+        <property name = "user" value="db2_owner"/>
+        <property name = "password" value="db2"/>
+    </bean>
+
+</beans>

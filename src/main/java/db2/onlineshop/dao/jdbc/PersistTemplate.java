@@ -1,16 +1,13 @@
 package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.Persistent;
-import db2.onlineshop.dao.jdbc.mapper.RowMapper;
-import db2.onlineshop.entity.Product;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class ProductDao implements Persistent {
+public abstract class PersistTemplate implements Persistent {
     DataSource dataSource;
 
     String SELECT_ALL;

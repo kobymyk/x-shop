@@ -1,6 +1,6 @@
 package db2.onlineshop;
 
-import db2.onlineshop.dao.jdbc.ProductDao;
+import db2.onlineshop.dao.jdbc.PersistTemplate;
 import db2.onlineshop.dao.UserDao;
 import db2.onlineshop.dao.jdbc.ProductDb;
 import db2.onlineshop.dao.jdbc.UserDb;
@@ -31,17 +31,18 @@ public class Starter {
         try (InputStream stream = classLoader.getResourceAsStream("application.properties")) {
             properties.load(stream);
         }
+        /*
         // config connections
         Locale.setDefault(Locale.ENGLISH); // XE limitation
         LocaleConnection defaultConnection = OwnerConnection.getInstance(properties);
         LocaleConnection userConnection = OwnerConnection.getInstance(properties);
         // configure daos
-        ProductDao productDb = new ProductDb();
+        PersistTemplate productDb = new ProductDb();
         UserDao userDb = new UserDb();
         productDb.setDataSource(defaultConnection.getDataSource());
         //userDb.setDataSource(userConnection.getDataSource());
         // configure services
-        BasicProductService productService = new BasicProductService(productDb);
+        //BasicProductService productService = new BasicProductService(productDb);
         BasicUserService userService = new BasicUserService(userDb);
         SecurityService securityService = new SecurityService(userService);
         // servlets
@@ -52,7 +53,6 @@ public class Starter {
         productsServlet.setProductService(productService);
         loginServlet.setSecurityService(securityService);
         editServlet.setProductService(productService);
-        /*
         // config web server
         ServletContextHandler servletContextHandler = new ServletContextHandler();
         servletContextHandler.addServlet(new ServletHolder(productsServlet), "/products");

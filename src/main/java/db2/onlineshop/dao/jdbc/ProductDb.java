@@ -7,8 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//ProductDao impl
-public class ProductDb extends ProductDao {
+//PersistTemplate impl
+public class ProductDb extends PersistTemplate {
     //private DataSource dataSource;
 
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();

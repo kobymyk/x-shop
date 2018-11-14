@@ -1,6 +1,6 @@
 package db2.onlineshop.service.impl;
 
-import db2.onlineshop.dao.jdbc.ProductDao;
+import db2.onlineshop.dao.jdbc.ProductDb;
 import db2.onlineshop.dao.jdbc.mapper.ProductMapper;
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
@@ -10,38 +10,38 @@ import java.util.Map;
 
 public class BasicProductService implements ProductService {
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
-    private ProductDao productDao;
+    private ProductDb productDb;
 
-    public BasicProductService(ProductDao productDao) {
-        this.productDao = productDao;
+    public BasicProductService(ProductDb productDb) {
+        this.productDb = productDb;
     }
 
     @Override
     public List<Object> getItems() {
-        return productDao.selectAll();
+        return productDb.selectAll();
     }
 
     @Override
     public int updateItem(Map params) {
         Product product = PRODUCT_MAPPER.fromParams(params);
 
-        return productDao.updateRow(product);
+        return productDb.updateRow(product);
     }
 
     @Override
     public int addItem(Map params) {
         Product product = PRODUCT_MAPPER.fromParams(params);
 
-        return productDao.insertRow(product);
+        return productDb.insertRow(product);
     }
 
     @Override
     public Object getItem(String key) {
-        return productDao.getUnique(key);
+        return productDb.getUnique(key);
     }
 
     @Override
     public int removeItem(String key) {
-        return productDao.deleteRow(key);
+        return productDb.deleteRow(key);
     }
 }

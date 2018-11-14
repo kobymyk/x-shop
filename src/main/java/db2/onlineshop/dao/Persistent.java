@@ -1,6 +1,5 @@
 package db2.onlineshop.dao;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public interface Persistent<T, K> {

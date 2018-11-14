@@ -1,7 +1,5 @@
 package db2.onlineshop.service;
 
-import db2.onlineshop.entity.Product;
-
 import java.util.List;
 import java.util.Map;
 

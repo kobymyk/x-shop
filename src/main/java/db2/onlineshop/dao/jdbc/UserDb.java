@@ -48,9 +48,8 @@ public class UserDb implements UserDao/*, Persistent*/ {
     }
 
     @Override
-    public void setDataSource(DataSource dataSource) {
-        Locale.setDefault(Locale.ENGLISH); // XE limitation
-        this.dataSource = dataSource;
+    public int deleteRow(Object key) {
+        return 0;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package db2.onlineshop;
 
-import db2.onlineshop.dao.ProductDao;
+import db2.onlineshop.dao.jdbc.ProductDao;
 import db2.onlineshop.dao.UserDao;
 import db2.onlineshop.dao.jdbc.ProductDb;
 import db2.onlineshop.dao.jdbc.UserDb;
@@ -39,7 +39,7 @@ public class Starter {
         ProductDao productDb = new ProductDb();
         UserDao userDb = new UserDb();
         productDb.setDataSource(defaultConnection.getDataSource());
-        userDb.setDataSource(userConnection.getDataSource());
+        //userDb.setDataSource(userConnection.getDataSource());
         // configure services
         BasicProductService productService = new BasicProductService(productDb);
         BasicUserService userService = new BasicUserService(userDb);

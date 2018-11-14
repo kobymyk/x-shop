@@ -1,6 +1,5 @@
 package db2.onlineshop.web.utils;
 
-import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
 import db2.onlineshop.web.templater.PageGenerator;
 
@@ -18,7 +17,7 @@ public class EditProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PageGenerator pageGenerator = PageGenerator.instance();
-        Product product = productService.getItem(PKEY, request.getParameter(PKEY));
+        Object product = productService.getItem(request.getParameter(PKEY));
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("product", product);

@@ -5,12 +5,14 @@ import db2.onlineshop.entity.Product;
 import java.util.List;
 import java.util.Map;
 
-public interface ProductService {
-    List<Product> getItems();
+public interface ProductService<T> {
+    List<T> getItems();
 
     int updateItem(Map<String, String> params);
 
     int addItem(Map<String, String> params);
 
-    Product getItem(String paramName, String paramValue);
+    T getItem(String key);
+
+    int removeItem(String key);
 }

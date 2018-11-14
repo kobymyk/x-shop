@@ -34,6 +34,11 @@
                 <td>
                     <button class="table-edit" onclick="window.location.href='product-edit?id=${product.id}'"> Edit </button>
                 </td>
+                <td>
+                    <form action="/product-delete?id=${product.id}" method="POST" name="delete${product.id}">
+                        <a href="#" onclick="delete${product.id}.submit()">Delete</a>
+                    </form>
+                </td>
             </tr>
         </#list>
         </tbody>

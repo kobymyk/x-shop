@@ -1,7 +1,7 @@
 package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.ProductDao;
-import db2.onlineshop.dao.jdbc.mapper.ProductRowMapper;
+import db2.onlineshop.dao.jdbc.mapper.ProductMapper;
 import db2.onlineshop.entity.Product;
 
 import javax.sql.DataSource;
@@ -19,7 +19,7 @@ public class ProductDb implements ProductDao {
     private static final String INSERT_ROW = "INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, ?, ?, sysdate)";
     private static final String UPDATE_ROW = "UPDATE product t SET t.name = ? WHERE t.id = ?";
 
-    private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
+    private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
 
     @Override
     public List<Product> selectAll() {
@@ -30,7 +30,7 @@ public class ProductDb implements ProductDao {
 
             List<Product> products = new ArrayList<>();
             while (resultSet.next()) {
-                Product product = PRODUCT_ROW_MAPPER.mapRow(resultSet);
+                Product product = PRODUCT_MAPPER.fromCursor(resultSet);
                 products.add(product);
             }
 
@@ -58,7 +58,7 @@ public class ProductDb implements ProductDao {
 
             resultSet.next();
             if (resultSet != null) {
-                product = PRODUCT_ROW_MAPPER.mapRow(resultSet);
+                product = PRODUCT_MAPPER.fromCursor(resultSet);
             }
 
             return product;

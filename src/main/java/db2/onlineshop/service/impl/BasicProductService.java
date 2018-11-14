@@ -1,6 +1,7 @@
 package db2.onlineshop.service.impl;
 
 import db2.onlineshop.dao.ProductDao;
+import db2.onlineshop.dao.jdbc.mapper.ProductMapper;
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BasicProductService implements ProductService {
+    private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
     private ProductDao productDao;
 
     public BasicProductService(ProductDao productDao) {
@@ -16,30 +18,26 @@ public class BasicProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getAll() {
+    public List<Product> getItems() {
         return productDao.selectAll();
     }
 
     @Override
-    public void update(HashMap<String, String> params) {
-        Product product = new Product();
-        product.setId(Integer.parseInt(params.get("id")));
-        product.setName(params.get("name"));
+    public int updateItem(Map<String, String> params) {
+        Product product = PRODUCT_MAPPER.fromParams(params);
 
-        productDao.updateRow(product);
+        return productDao.updateRow(product);
     }
 
     @Override
-    public void add(Map<String, String> params) {
-        Product product = new Product();
-        product.setName(params.get("name"));
-        product.setPrice(Double.parseDouble(params.get("price")));
+    public int addItem(Map<String, String> params) {
+        Product product = PRODUCT_MAPPER.fromParams(params);
 
-        productDao.insertRow(product);
+        return productDao.insertRow(product);
     }
 
     @Override
-    public Product getScalar(String paramName, String paramValue) {
+    public Product getItem(String paramName, String paramValue) {
         if ("id".equals(paramName)) {
             return productDao.getUnique(Integer.parseInt(paramValue));
         }

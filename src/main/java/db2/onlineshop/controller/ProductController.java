@@ -35,7 +35,7 @@ public class ProductController {
     @ResponseBody
     public String allForGet() {
         log.info("START:ProductController.allForGet");
-        List<Product> items = productService.getAll();
+        List<Product> items = productService.getItems();
         HashMap<String, Object> data = ParamConverter.fromList(items, "products");
         String result = PAGE_GENERATOR.getPage("products", data);
         log.info("END:ProductController.allForGet");
@@ -47,7 +47,7 @@ public class ProductController {
     @ResponseBody
     public String editForGet(@RequestParam(KEY) String id) {
         log.info("START:ProductController.editForGet({})", id);
-        Product item = productService.getScalar(KEY, id);
+        Product item = productService.getItem(KEY, id);
 
         HashMap<String, Object> data = ParamConverter.fromObject(item, "product");
         String result = PAGE_GENERATOR.getPage("product-edit", data);
@@ -61,28 +61,28 @@ public class ProductController {
         log.info("START:ProductController.editForPost");
         Map<String, String[]> paramMap = request.getParameterMap();
         HashMap<String, String> data = ParamConverter.fromParamMap(paramMap);
-        productService.update(data);
+        productService.updateItem(data);
         log.info("END:ProductController.editForPost");
 
-        response.sendRedirect("/products");
+        response.sendRedirect("products");
     }
 
-    @RequestMapping(path = "/product-add", method = RequestMethod.GET)
+    @RequestMapping(path = "/product-addItem", method = RequestMethod.GET)
     @ResponseBody
     public String addForGet() {
         log.info("START:ProductController.addForGet");
-        String result = PAGE_GENERATOR.getPage("product-add", null);
+        String result = PAGE_GENERATOR.getPage("product-addItem", null);
         log.info("END:ProductController.addForGet");
 
         return result;
     }
-    @RequestMapping(path = "/product-add", method = RequestMethod.POST)
+    @RequestMapping(path = "/product-addItem", method = RequestMethod.POST)
     //@ResponseBody not needed for redirect
     public String addForPost(HttpServletRequest request) {
         log.info("START:ProductController.addForPost");
         Map<String, String[]> paramMap = request.getParameterMap();
         HashMap<String, String> data = ParamConverter.fromParamMap(paramMap);
-        productService.add(data);
+        productService.addItem(data);
         log.info("END:ProductController.addForPost");
 
         return "redirect:/products";

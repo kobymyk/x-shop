@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface Persistent<T> {
     List<T> selectAll();
-    // return rows updated
+    // return rows updated/inserted
     int updateRow(T version);
     int insertRow(T version);
-
+    // not good
     void setDataSource(DataSource dataSource);
 }

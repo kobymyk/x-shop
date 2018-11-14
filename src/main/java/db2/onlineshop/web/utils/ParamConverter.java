@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ParamConverter {
-    // todo: add Entity
+    // todo: addItem Entity
     public static HashMap<String, Object> fromList(List<?> list, String paramName) {
         HashMap<String, Object> result = new HashMap<>();
         result.put(paramName, list);

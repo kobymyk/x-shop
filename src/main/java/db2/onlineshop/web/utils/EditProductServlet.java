@@ -18,7 +18,7 @@ public class EditProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PageGenerator pageGenerator = PageGenerator.instance();
-        Product product = productService.getScalar(PKEY, request.getParameter(PKEY));
+        Product product = productService.getItem(PKEY, request.getParameter(PKEY));
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("product", product);
@@ -35,7 +35,7 @@ public class EditProductServlet extends HttpServlet {
         parameters.put("name", request.getParameter("name"));
         //parameters.put("price", request.getParameter("price"));
 
-        productService.update(parameters);
+        productService.updateItem(parameters);
         response.sendRedirect("/products");
     }
 

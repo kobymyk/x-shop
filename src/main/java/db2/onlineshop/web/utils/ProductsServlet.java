@@ -19,7 +19,7 @@ public class ProductsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //if (isAuth) -> moved to filter
         PageGenerator pageGenerator = PageGenerator.instance();
-        List<Product> products = productService.getAll();
+        List<Product> products = productService.getItems();
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("products", products);

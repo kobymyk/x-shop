@@ -1,7 +1,7 @@
 package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.UserDao;
-import db2.onlineshop.dao.jdbc.mapper.UserRowMapper;
+import db2.onlineshop.dao.jdbc.mapper.UserMapper;
 import db2.onlineshop.entity.User;
 
 import javax.sql.DataSource;
@@ -16,7 +16,7 @@ public class UserDb implements UserDao/*, Persistent*/ {
     private static final String SELECT_ALL = "SELECT * FROM users";
     private static final String FETCH_BY_LOGIN = "SELECT * FROM users t where t.login = ?";
 
-    private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
+    private static final UserMapper USER_ROW_MAPPER = new UserMapper();
 
     @Override
     public List<User> selectAll() {
@@ -26,7 +26,7 @@ public class UserDb implements UserDao/*, Persistent*/ {
 
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
-                User user = USER_ROW_MAPPER.mapRow(resultSet);
+                User user = USER_ROW_MAPPER.fromCursor(resultSet);
                 users.add(user);
             }
 
@@ -63,7 +63,7 @@ public class UserDb implements UserDao/*, Persistent*/ {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             if (resultSet != null) {
-                result = USER_ROW_MAPPER.mapRow(resultSet);
+                result = USER_ROW_MAPPER.fromCursor(resultSet);
             }
 
             return result;

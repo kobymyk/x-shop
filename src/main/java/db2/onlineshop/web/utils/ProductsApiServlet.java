@@ -18,7 +18,7 @@ public class ProductsApiServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<Product> products = productService.getAll();
+        List<Product> products = productService.getItems();
         // products -> json
         String json = OBJECT_MAPPER.writeValueAsString(products);
         resp.getWriter().write(json);

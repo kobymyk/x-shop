@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class UserDb implements UserDao/*, Persistent*/ {
     private DataSource dataSource;
@@ -18,10 +19,10 @@ public class UserDb implements UserDao/*, Persistent*/ {
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
     @Override
-    public List<User> getAll() {
+    public List<User> selectAll() {
         try (Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_ALL)) {
+                ResultSet resultSet = statement.executeQuery(SELECT_ALL)) {
 
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
@@ -37,12 +38,18 @@ public class UserDb implements UserDao/*, Persistent*/ {
     }
 
     @Override
-    public int update(Object version) {
+    public int updateRow(Object version) {
+        return 0;
+    }
+
+    @Override
+    public int insertRow(Object version) {
         return 0;
     }
 
     @Override
     public void setDataSource(DataSource dataSource) {
+        Locale.setDefault(Locale.ENGLISH); // XE limitation
         this.dataSource = dataSource;
     }
 
@@ -51,15 +58,15 @@ public class UserDb implements UserDao/*, Persistent*/ {
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FETCH_BY_LOGIN)) {
 
-            User user = null;
+            User result = null;
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             if (resultSet != null) {
-                user = USER_ROW_MAPPER.mapRow(resultSet);
+                result = USER_ROW_MAPPER.mapRow(resultSet);
             }
 
-            return user;
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

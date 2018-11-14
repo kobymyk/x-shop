@@ -6,6 +6,7 @@ import db2.onlineshop.service.ProductService;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BasicProductService implements ProductService {
     private ProductDao productDao;
@@ -16,7 +17,7 @@ public class BasicProductService implements ProductService {
 
     @Override
     public List<Product> getAll() {
-        return productDao.getAll();
+        return productDao.selectAll();
     }
 
     @Override
@@ -25,7 +26,16 @@ public class BasicProductService implements ProductService {
         product.setId(Integer.parseInt(params.get("id")));
         product.setName(params.get("name"));
 
-        productDao.update(product);
+        productDao.updateRow(product);
+    }
+
+    @Override
+    public void add(Map<String, String> params) {
+        Product product = new Product();
+        product.setName(params.get("name"));
+        product.setPrice(Double.parseDouble(params.get("price")));
+
+        productDao.insertRow(product);
     }
 
     @Override

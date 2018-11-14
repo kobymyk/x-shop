@@ -4,9 +4,10 @@ import javax.sql.DataSource;
 import java.util.List;
 
 public interface Persistent<T> {
-    List<T> getAll();
+    List<T> selectAll();
     // return rows updated
-    int update(T version);
+    int updateRow(T version);
+    int insertRow(T version);
 
     void setDataSource(DataSource dataSource);
 }

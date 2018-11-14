@@ -4,7 +4,7 @@ import db2.onlineshop.entity.Product;
 
 public interface ProductDao extends Persistent {
 
-    //List<Product> getAll();
+    //List<Product> selectAll();
 
     Product getUnique(int id);
 }

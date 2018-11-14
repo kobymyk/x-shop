@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 //ProductDao impl
 public class ProductDb implements ProductDao {
@@ -15,12 +16,13 @@ public class ProductDb implements ProductDao {
 
     private static final String SELECT_ALL = "SELECT * FROM product";
     private static final String FETCH_ROW = "SELECT * FROM product t WHERE t.id = ?";
+    private static final String INSERT_ROW = "INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, ?, ?, sysdate)";
     private static final String UPDATE_ROW = "UPDATE product t SET t.name = ? WHERE t.id = ?";
 
     private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
 
     @Override
-    public List<Product> getAll() {
+    public List<Product> selectAll() {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL)) {
@@ -41,6 +43,7 @@ public class ProductDb implements ProductDao {
 
     @Override
     public void setDataSource(DataSource dataSource) {
+        Locale.setDefault(Locale.ENGLISH); // XE limitation
         this.dataSource = dataSource;
     }
 
@@ -66,13 +69,29 @@ public class ProductDb implements ProductDao {
     }
 
     @Override
-    public int update(Object version) {
+    public int updateRow(Object version) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ROW)) {
 
             Product product = (Product) version;
             statement.setString(1, product.getName());
             statement.setInt(2, product.getId());
+
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int insertRow(Object version) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(INSERT_ROW)) {
+
+            Product product = (Product) version;
+            statement.setString(1, product.getName());
+            statement.setDouble(2, product.getPrice());
 
             return statement.executeUpdate();
         } catch (SQLException e) {

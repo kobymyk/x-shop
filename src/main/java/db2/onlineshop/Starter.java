@@ -1,17 +1,5 @@
 package db2.onlineshop;
 
-import db2.onlineshop.dao.jdbc.PersistTemplate;
-import db2.onlineshop.dao.UserDao;
-import db2.onlineshop.dao.jdbc.ProductDb;
-import db2.onlineshop.dao.jdbc.UserDb;
-import db2.onlineshop.service.impl.BasicProductService;
-import db2.onlineshop.service.impl.BasicUserService;
-import db2.onlineshop.web.utils.EditProductServlet;
-import db2.onlineshop.web.utils.LoginServlet;
-import db2.onlineshop.web.utils.ProductsServlet;
-import db2.onlineshop.dao.jdbc.service.LocaleConnection;
-import db2.onlineshop.dao.jdbc.service.impl.OwnerConnection;
-import db2.onlineshop.security.SecurityService;
 /*
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.utils.FilterHolder;
@@ -20,8 +8,7 @@ import org.eclipse.jetty.utils.ServletHolder;
 */
 //import javax.utils.DispatcherType;
 import java.io.InputStream;
-import java.util.Locale;
-import java.util.Properties;
+        import java.util.Properties;
 
 public class Starter {
     public static void main(String[] args) throws Exception {
@@ -37,7 +24,7 @@ public class Starter {
         LocaleConnection defaultConnection = OwnerConnection.getInstance(properties);
         LocaleConnection userConnection = OwnerConnection.getInstance(properties);
         // configure daos
-        PersistTemplate productDb = new ProductDb();
+        TemplateDb productDb = new ProductDb();
         UserDao userDb = new UserDb();
         productDb.setDataSource(defaultConnection.getDataSource());
         //userDb.setDataSource(userConnection.getDataSource());

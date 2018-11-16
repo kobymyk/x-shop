@@ -7,37 +7,37 @@ import java.sql.*;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class PersistTemplate implements Persistent {
+public abstract class TemplateDb<T, K> implements Persistent<T, K> {
     DataSource dataSource;
 
-    String SELECT_ALL;
-    String FETCH_ROW;
-    String INSERT_ROW;
-    String UPDATE_ROW;
-    String DELETE_ROW;
+    String sqlSelectAll;
+    String sqlFetchRow;
+    String dmlInsertRow;
+    String dmlUpdateRow;
+    String dmlDeleteRow;
 
-    // unique key: id | name
-    abstract void setKey(Statement statement, Object key);
+    // unique key: int | String
+    abstract void setKey(Statement statement, K key);
 
     public void setDataSource(DataSource dataSource) {
         Locale.setDefault(Locale.ENGLISH); // XE limitation
         this.dataSource = dataSource;
     }
 
-    abstract void prepareUpdate(PreparedStatement statement, Object version) throws SQLException;
-    abstract void prepareInsert(PreparedStatement statement, Object version) throws SQLException;
+    abstract void prepareUpdate(PreparedStatement statement, T version) throws SQLException;
+    abstract void prepareInsert(PreparedStatement statement, T version) throws SQLException;
 
-    abstract List<Object> fetchCursor(ResultSet cursor) throws SQLException;
+    abstract List<T> fetchCursor(ResultSet cursor) throws SQLException;
 
-    public final Object getUnique(Object key) {
+    public final T getUnique(K key) {
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(FETCH_ROW)) {
+                PreparedStatement statement = connection.prepareStatement(sqlFetchRow)) {
             //setKey
             setKey(statement, key);
 
             ResultSet cursor = statement.executeQuery();
-            Object result = fetchCursor(cursor).get(0);
+            T result = fetchCursor(cursor).get(0);
 
             return result;
         } catch (SQLException e) {
@@ -46,10 +46,10 @@ public abstract class PersistTemplate implements Persistent {
         }
     }
 
-    public int deleteRow(Object key) {
+    public int deleteRow(K key) {
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(DELETE_ROW)) {
+                PreparedStatement statement = connection.prepareStatement(dmlDeleteRow)) {
 
             setKey(statement, key);
 
@@ -60,13 +60,13 @@ public abstract class PersistTemplate implements Persistent {
         }
     }
 
-    public List<Object> selectAll() {
+    public List<T> selectAll() {
         try (
                 Connection connection = dataSource.getConnection();
                 Statement sqlSelect = connection.createStatement();
-                ResultSet cursor = sqlSelect.executeQuery(SELECT_ALL)) {
+                ResultSet cursor = sqlSelect.executeQuery(sqlSelectAll)) {
 
-            List<Object> result = fetchCursor(cursor);
+            List<T> result = fetchCursor(cursor);
 
             return result;
         } catch (SQLException e) {
@@ -75,10 +75,10 @@ public abstract class PersistTemplate implements Persistent {
         }
     }
 
-    public int updateRow(Object version) {
+    public int updateRow(T version) {
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(UPDATE_ROW)) {
+                PreparedStatement statement = connection.prepareStatement(dmlUpdateRow)) {
 
             prepareUpdate(statement, version);
 
@@ -89,10 +89,10 @@ public abstract class PersistTemplate implements Persistent {
         }
     }
 
-    public int insertRow(Object version) {
+    public int insertRow(T version) {
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(INSERT_ROW)) {
+                PreparedStatement statement = connection.prepareStatement(dmlInsertRow)) {
 
             prepareInsert(statement, version);
 

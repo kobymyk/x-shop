@@ -1,5 +1,6 @@
 package db2.onlineshop.controller;
 
+import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
 import db2.onlineshop.web.templater.PageGenerator;
 
@@ -34,7 +35,7 @@ public class ProductController {
     @ResponseBody
     public String allForGet() {
         log.info("START:ProductController.allForGet");
-        List<Object> items = productService.getItems();
+        List<Product> items = productService.getItems();
         HashMap<String, Object> data = ParamConverter.fromList(items, "products");
         String result = PAGE_GENERATOR.getPage("products", data);
         log.info("END:ProductController.allForGet");

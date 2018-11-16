@@ -17,7 +17,7 @@ public class BasicProductService implements ProductService {
     }
 
     @Override
-    public List<Object> getItems() {
+    public List<Product> getItems() {
         return productDb.selectAll();
     }
 
@@ -36,8 +36,8 @@ public class BasicProductService implements ProductService {
     }
 
     @Override
-    public Object getItem(String key) {
-        return productDb.getUnique(key);
+    public Product getItem(String key) {
+        return (Product) productDb.getUnique(key);
     }
 
     @Override

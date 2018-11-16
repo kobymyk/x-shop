@@ -7,18 +7,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//PersistTemplate impl
-public class ProductDb extends PersistTemplate {
+//TemplateDb impl
+public class ProductDb extends TemplateDb {
     //private DataSource dataSource;
 
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
 
     public ProductDb() {
-        SELECT_ALL = "SELECT * FROM product";
-        FETCH_ROW = "SELECT * FROM product t WHERE t.id = ?";
-        INSERT_ROW = "INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, ?, ?, sysdate)";
-        UPDATE_ROW = "UPDATE product t SET t.name = ? WHERE t.id = ?";
-        DELETE_ROW = "DELETE product t WHERE t.id = ?";
+        sqlSelectAll = "SELECT * FROM product";
+        sqlFetchRow = "SELECT * FROM product t WHERE t.id = ?";
+        dmlInsertRow = "INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, ?, ?, sysdate)";
+        dmlUpdateRow = "UPDATE product t SET t.name = ? WHERE t.id = ?";
+        dmlDeleteRow = "DELETE product t WHERE t.id = ?";
     }
 
     public void setKey(Statement statement, Object key) {
@@ -32,8 +32,8 @@ public class ProductDb extends PersistTemplate {
         }
     }
 
-    final List<Object> fetchCursor(ResultSet cursor) throws SQLException {
-        List<Object> result = new ArrayList<>();
+    final List<Product> fetchCursor(ResultSet cursor) throws SQLException {
+        List<Product> result = new ArrayList<>();
         while (cursor.next()) {
             Product product = PRODUCT_MAPPER.fromCursor(cursor);
             result.add(product);

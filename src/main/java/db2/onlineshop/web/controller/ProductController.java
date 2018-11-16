@@ -1,4 +1,4 @@
-package db2.onlineshop.controller;
+package db2.onlineshop.web.controller;
 
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class ProductController {
     public String allForGet() {
         log.info("START:ProductController.allForGet");
         List<Product> items = productService.getItems();
-        HashMap<String, Object> data = ParamConverter.fromList(items, "products");
+        Map<String, Object> data = ParamConverter.fromList(items, "products");
         String result = PAGE_GENERATOR.getPage("products", data);
         log.info("END:ProductController.allForGet");
 
@@ -49,7 +48,7 @@ public class ProductController {
         log.info("START:ProductController.editForGet({})", id);
         Object item = productService.getItem(id);
 
-        HashMap<String, Object> data = ParamConverter.fromObject(item, "product");
+        Map<String, Object> data = ParamConverter.fromObject(item, "product");
         String result = PAGE_GENERATOR.getPage("product-edit", data);
         log.info("END:ProductController.editForGet");
 
@@ -60,7 +59,7 @@ public class ProductController {
     public void editForPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("START:ProductController.editForPost");
         Map<String, String[]> paramMap = request.getParameterMap();
-        HashMap<String, String> data = ParamConverter.fromParamMap(paramMap);
+        Map<String, String> data = ParamConverter.fromParamMap(paramMap);
         productService.updateItem(data);
         log.info("END:ProductController.editForPost");
 
@@ -81,7 +80,7 @@ public class ProductController {
     public String addForPost(HttpServletRequest request) {
         log.info("START:ProductController.addForPost");
         Map<String, String[]> paramMap = request.getParameterMap();
-        HashMap<String, String> data = ParamConverter.fromParamMap(paramMap);
+        Map<String, String> data = ParamConverter.fromParamMap(paramMap);
         productService.addItem(data);
         log.info("END:ProductController.addForPost");
 

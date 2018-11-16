@@ -5,7 +5,6 @@ import db2.onlineshop.entity.Product;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ProductMapper implements RowMapper {

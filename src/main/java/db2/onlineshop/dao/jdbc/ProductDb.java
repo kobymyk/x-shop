@@ -15,18 +15,19 @@ public class ProductDb extends TemplateDb {
 
     @Autowired
     String sqlSelectProducts;
+    @Autowired
+    String sqlFetchProduct;
 
     public ProductDb() {
-        sqlFetchRow = "SELECT * FROM product t WHERE t.id = ?";
         dmlInsertRow = "INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, ?, ?, sysdate)";
         dmlUpdateRow = "UPDATE product t SET t.name = ? WHERE t.id = ?";
         dmlDeleteRow = "DELETE product t WHERE t.id = ?";
     }
 
     @Override
-    protected String getSqlSelectAll() {
-        return sqlSelectProducts;
-    }
+    protected String getSqlSelectAll() { return sqlSelectProducts; }
+    @Override
+    protected String getSqlFetchRow() { return sqlFetchProduct; }
 
     @Override
     public void setKey(Statement statement, Object key) {

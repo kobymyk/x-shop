@@ -13,8 +13,6 @@ public abstract class TemplateDb<T, K> implements Persistent<T, K> {
     private final Logger log = LoggerFactory.getLogger(getClass());
     DataSource dataSource;
 
-
-    protected String sqlFetchRow;
     protected String dmlInsertRow;
     protected String dmlUpdateRow;
     protected String dmlDeleteRow;
@@ -28,6 +26,7 @@ public abstract class TemplateDb<T, K> implements Persistent<T, K> {
     }
 
     abstract String getSqlSelectAll();
+    abstract String getSqlFetchRow();
 
     abstract void prepareUpdate(PreparedStatement statement, T version) throws SQLException;
     abstract void prepareInsert(PreparedStatement statement, T version) throws SQLException;
@@ -37,7 +36,7 @@ public abstract class TemplateDb<T, K> implements Persistent<T, K> {
     public final T getUnique(K key) {
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sqlFetchRow)) {
+                PreparedStatement statement = connection.prepareStatement(getSqlFetchRow())) {
             //setKey
             setKey(statement, key);
 

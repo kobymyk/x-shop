@@ -5,7 +5,10 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="sqlSelectProducts" class="java.lang.String">
-        <constructor-arg value="SELECT * FROM product"/>
+        <constructor-arg value="SELECT t.* FROM product t"/>
+    </bean>
+    <bean id="sqlFetchProduct" class="java.lang.String">
+        <constructor-arg value="SELECT t.* FROM product t WHERE t.id = ?"/>
     </bean>
 
 </beans>

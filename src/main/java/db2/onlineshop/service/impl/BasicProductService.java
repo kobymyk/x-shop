@@ -4,12 +4,16 @@ import db2.onlineshop.dao.jdbc.ProductDb;
 import db2.onlineshop.dao.jdbc.mapper.ProductMapper;
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class BasicProductService implements ProductService {
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
+    @Autowired
     private ProductDb productDb;
 
     public BasicProductService(ProductDb productDb) {

@@ -2,12 +2,13 @@ package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.jdbc.mapper.ProductMapper;
 import db2.onlineshop.entity.Product;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//TemplateDb impl
+@Service
 public class ProductDb extends TemplateDb {
     //private DataSource dataSource;
 

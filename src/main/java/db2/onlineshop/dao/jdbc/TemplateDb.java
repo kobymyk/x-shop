@@ -1,6 +1,8 @@
 package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.Persistent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -8,13 +10,14 @@ import java.util.List;
 import java.util.Locale;
 
 public abstract class TemplateDb<T, K> implements Persistent<T, K> {
+    private final Logger log = LoggerFactory.getLogger(getClass());
     DataSource dataSource;
 
-    String sqlSelectAll;
-    String sqlFetchRow;
-    String dmlInsertRow;
-    String dmlUpdateRow;
-    String dmlDeleteRow;
+
+    protected String sqlFetchRow;
+    protected String dmlInsertRow;
+    protected String dmlUpdateRow;
+    protected String dmlDeleteRow;
 
     // unique key: int | String
     abstract void setKey(Statement statement, K key);
@@ -23,6 +26,8 @@ public abstract class TemplateDb<T, K> implements Persistent<T, K> {
         Locale.setDefault(Locale.ENGLISH); // XE limitation
         this.dataSource = dataSource;
     }
+
+    abstract String getSqlSelectAll();
 
     abstract void prepareUpdate(PreparedStatement statement, T version) throws SQLException;
     abstract void prepareInsert(PreparedStatement statement, T version) throws SQLException;
@@ -61,12 +66,14 @@ public abstract class TemplateDb<T, K> implements Persistent<T, K> {
     }
 
     public List<T> selectAll() {
+        log.info("selectAll::start");
         try (
                 Connection connection = dataSource.getConnection();
                 Statement sqlSelect = connection.createStatement();
-                ResultSet cursor = sqlSelect.executeQuery(sqlSelectAll)) {
+                ResultSet cursor = sqlSelect.executeQuery(getSqlSelectAll())) {
 
             List<T> result = fetchCursor(cursor);
+            log.info("selectAll::end");
 
             return result;
         } catch (SQLException e) {

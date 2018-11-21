@@ -12,17 +12,6 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="db2.onlineshop.web.controller"/>
-    <context:property-placeholder location="classpath:application.properties"/>
     <mvc:annotation-driven/>
-
-    <bean id="productService" class="db2.onlineshop.service.impl.BasicProductService">
-        <constructor-arg ref="productDb"/>
-    </bean>
-
-    <bean id="productDb" class="db2.onlineshop.dao.jdbc.ProductDb">
-        <property name = "dataSource" ref="dataSource"/>
-    </bean>
-
-
 
 </beans>

@@ -1,16 +1,15 @@
 package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.UserDao;
-import db2.onlineshop.dao.jdbc.mapper.UserMapper;
+import db2.onlineshop.dao.jdbc.mapper.impl.UserMapper;
 import db2.onlineshop.entity.User;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class UserDb implements UserDao/*, Persistent*/ {
+public class UserDb implements UserDao {
     private DataSource dataSource;
 
     private static final String SELECT_ALL = "SELECT * FROM users";
@@ -18,7 +17,7 @@ public class UserDb implements UserDao/*, Persistent*/ {
 
     private static final UserMapper USER_ROW_MAPPER = new UserMapper();
 
-    @Override
+    //@Override
     public List<User> selectAll() {
         try (Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
@@ -35,21 +34,6 @@ public class UserDb implements UserDao/*, Persistent*/ {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public int updateRow(Object version) {
-        return 0;
-    }
-
-    @Override
-    public int insertRow(Object version) {
-        return 0;
-    }
-
-    @Override
-    public int deleteRow(Object key) {
-        return 0;
     }
 
     @Override

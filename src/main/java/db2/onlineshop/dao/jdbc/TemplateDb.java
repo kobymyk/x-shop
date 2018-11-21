@@ -3,109 +3,86 @@ package db2.onlineshop.dao.jdbc;
 import db2.onlineshop.dao.Persistent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.sql.*;
+
 import java.util.List;
 import java.util.Locale;
 
+@Service
 public abstract class TemplateDb<T, K> implements Persistent<T, K> {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    DataSource dataSource;
 
-    protected String dmlInsertRow;
-    protected String dmlUpdateRow;
-    protected String dmlDeleteRow;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    // unique key: int | String
-    abstract void setKey(Statement statement, K key);
-
-    public void setDataSource(DataSource dataSource) {
-        Locale.setDefault(Locale.ENGLISH); // XE limitation
-        this.dataSource = dataSource;
-    }
+    abstract Class getEntityClass();
+    abstract RowMapper getRowMapper();
 
     abstract String getSqlSelectAll();
     abstract String getSqlFetchRow();
+    abstract String getDmlUpdateRow();
+    abstract String getDmlInsertRow();
+    abstract String getDmlDeleteRow();
 
-    abstract void prepareUpdate(PreparedStatement statement, T version) throws SQLException;
-    abstract void prepareInsert(PreparedStatement statement, T version) throws SQLException;
-
-    abstract List<T> fetchCursor(ResultSet cursor) throws SQLException;
-
-    public final T getUnique(K key) {
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(getSqlFetchRow())) {
-            //setKey
-            setKey(statement, key);
-
-            ResultSet cursor = statement.executeQuery();
-            T result = fetchCursor(cursor).get(0);
-
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public TemplateDb() {
+        // XE limitation
+        Locale.setDefault(Locale.ENGLISH);
     }
 
-    public int deleteRow(K key) {
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(dmlDeleteRow)) {
+    abstract MapSqlParameterSource prepareUpdate(T version);
+    abstract MapSqlParameterSource prepareInsert(T version);
 
-            setKey(statement, key);
+    @Override
+    public final T fetchRow(K key) {
+        log.info("fetchRow::start:key={}", key);
+        T result = (T) jdbcTemplate.queryForObject(getSqlFetchRow(), new Object[]{key}, getRowMapper());
+        log.info("fetchRow::end");
 
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return result;
     }
 
+    @Override
     public List<T> selectAll() {
         log.info("selectAll::start");
-        try (
-                Connection connection = dataSource.getConnection();
-                Statement sqlSelect = connection.createStatement();
-                ResultSet cursor = sqlSelect.executeQuery(getSqlSelectAll())) {
+        List<T> result  = jdbcTemplate.query(getSqlSelectAll(), new BeanPropertyRowMapper(getEntityClass()));
+        log.info("selectAll::end");
 
-            List<T> result = fetchCursor(cursor);
-            log.info("selectAll::end");
-
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return result;
     }
 
+    @Override
     public int updateRow(T version) {
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(dmlUpdateRow)) {
+        log.info("updateRow::start");
+        int result = namedJdbcTemplate.update(getDmlUpdateRow(), prepareUpdate(version));
+        log.info("updateRow::end");
 
-            prepareUpdate(statement, version);
-
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return result;
     }
 
+    @Override
     public int insertRow(T version) {
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(dmlInsertRow)) {
+        log.info("insertRow::start");
+        int result = namedJdbcTemplate.update(getDmlInsertRow(), prepareInsert(version));
+        log.info("insertRow::end");
 
-            prepareInsert(statement, version);
+        return result;
+    }
 
-            return statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    @Override
+    public int deleteRow(K key) {
+        log.info("deleteRow:key={}", key);
+        int result = jdbcTemplate.update(getDmlDeleteRow(), new Object[]{key});
+        log.info("deleteRow:result={}", result);
+
+        return result;
     }
 }

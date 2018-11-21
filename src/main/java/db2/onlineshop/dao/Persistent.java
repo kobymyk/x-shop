@@ -4,8 +4,11 @@ import java.util.List;
 
 public interface Persistent<T, K> {
     List<T> selectAll();
-    // return rows updated/inserted
+
+    T fetchRow(K key);
+
     int updateRow(T version);
+
     int insertRow(T version);
 
     int deleteRow(K key);

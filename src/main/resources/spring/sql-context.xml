@@ -10,5 +10,13 @@
     <bean id="sqlFetchProduct" class="java.lang.String">
         <constructor-arg value="SELECT t.* FROM product t WHERE t.id = ?"/>
     </bean>
-
+    <bean id="dmlUpdateRow" class="java.lang.String">
+        <constructor-arg value="UPDATE product t SET t.name = :name WHERE t.id = :id"/>
+    </bean>
+    <bean id="dmlInsertRow" class="java.lang.String">
+        <constructor-arg value="INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, :name, :price, sysdate)"/>
+    </bean>
+    <bean id="dmlDeleteRow" class="java.lang.String">
+        <constructor-arg value="DELETE product t WHERE t.id = ?"/>
+    </bean>
 </beans>

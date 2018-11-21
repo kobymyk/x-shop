@@ -1,13 +1,13 @@
-package db2.onlineshop.dao.jdbc.mapper;
+package db2.onlineshop.dao.jdbc.mapper.impl;
 
+import db2.onlineshop.dao.jdbc.mapper.SqlMapper;
 import db2.onlineshop.entity.User;
 import db2.onlineshop.entity.UserRole;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
-public class UserMapper implements RowMapper {
+public class UserMapper implements SqlMapper {
     @Override
     public User fromCursor(ResultSet cursor) throws SQLException {
         User user = new User();
@@ -19,11 +19,6 @@ public class UserMapper implements RowMapper {
         user.setSole(cursor.getString("sole"));
 
         return user;
-    }
-
-    @Override
-    public Object fromParams(Map params) {
-        return null;
     }
 
 }

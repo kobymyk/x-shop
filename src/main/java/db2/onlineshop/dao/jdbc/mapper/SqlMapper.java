@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public interface RowMapper<T> {
+public interface SqlMapper<T> {
 
     public T fromCursor(ResultSet cursor) throws SQLException;
 
-    public T fromParams(Map<String, String> params);
+    //public T fromParams(Map<String, String> params);
 }

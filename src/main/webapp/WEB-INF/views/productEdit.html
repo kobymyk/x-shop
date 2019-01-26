@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Edit Product</title>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="'Edit Product: ' + ${product.id}">id</h1>
+    <form action="#" th:action="@{/product/edit}" th:object="${product}" method="post">
+        <div class="row">
+            <div class="controls">
+                <input type="hidden" th:field="*{id}">
+                ProductName : <input type="text" th:field="*{name}">
+                Price : <input type="number" step=any th:field="*{price}">
+                <input type="reset" value="Reset" />
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

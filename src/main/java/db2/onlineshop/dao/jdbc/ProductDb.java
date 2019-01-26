@@ -2,59 +2,37 @@ package db2.onlineshop.dao.jdbc;
 
 import db2.onlineshop.dao.jdbc.mapper.ProductMapper;
 import db2.onlineshop.entity.Product;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
-public class ProductDb extends TemplateDb {
+@Repository
+public class ProductDb extends TemplateDb<Product> {
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
 
-    @Autowired
-    String sqlSelectProducts;
-    @Autowired
-    String sqlFetchProduct;
-    @Autowired
-    String dmlUpdateRow;
-    @Autowired
-    String dmlInsertRow;
-    @Autowired
-    String dmlDeleteRow;
+    public ProductDb() {
+        super();
+        this.rowMapper = PRODUCT_MAPPER;
+        this.sqlFetch = "SELECT t.* FROM product t WHERE t.id = ?";
+        this.sqlSelect = "SELECT t.* FROM product t";
+        this.sqlUpdate = "UPDATE product t SET t.name = :name WHERE t.id = :id";
+        this.sqlDelete = "DELETE product t WHERE t.id = ?";
+        this.sqlInsert = "INSERT INTO product(id, name, price, creation_date) values (seq_product.nextval, :name, :price, sysdate)";
+    }
 
     @Override
-    Class getEntityClass() { return Product.class; }
-
-    @Override
-    RowMapper getRowMapper() { return PRODUCT_MAPPER; }
-
-    @Override
-    String getSqlSelectAll() { return sqlSelectProducts; }
-    @Override
-    String getSqlFetchRow() { return sqlFetchProduct; }
-    @Override
-    String getDmlUpdateRow() { return dmlUpdateRow; }
-    @Override
-    String getDmlInsertRow() { return dmlInsertRow; }
-    @Override
-    String getDmlDeleteRow() { return dmlDeleteRow; }
-
-    @Override
-    final MapSqlParameterSource prepareUpdate(Object version) {
+    final MapSqlParameterSource prepareUpdate(Product version) {
         MapSqlParameterSource result = new MapSqlParameterSource();
-        Product product = (Product) version;
-        result.addValue("name", product.getName());
-        result.addValue("id", product.getId());
+        result.addValue("name", version.getName());
+        result.addValue("id", version.getId());
 
         return result;
     }
 
     @Override
-    MapSqlParameterSource prepareInsert(Object version) {
-        Product product = (Product) version;
+    MapSqlParameterSource prepareInsert(Product version) {
         MapSqlParameterSource result = new MapSqlParameterSource();
-        result.addValue("name", product.getName());
-        result.addValue("price", product.getPrice());
+        result.addValue("name", version.getName());
+        result.addValue("price", version.getPrice());
 
         return result;
     }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class BasicProductService implements ProductService {
@@ -19,40 +18,27 @@ public class BasicProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getItems() {
+    public List<Product> get() {
         return productDb.selectAll();
     }
 
     @Override
-    public int updateItem(Map params) {
-        Product product = fromParams(params);
-
+    public int update(Product product) {
         return productDb.updateRow(product);
     }
 
     @Override
-    public int addItem(Map params) {
-        Product product = fromParams(params);
-
+    public int add(Product product) {
         return productDb.insertRow(product);
     }
 
     @Override
-    public Product getItem(String key) {
-        return (Product) productDb.fetchRow(key);
+    public Product get(int id) {
+        return (Product) productDb.fetchRow(id);
     }
 
     @Override
-    public int removeItem(String key) {
-        return productDb.deleteRow(key);
-    }
-
-    private Product fromParams(Map params) {
-        Product result = new Product();
-        result.setId(Integer.parseInt((String) params.get("id")));
-        result.setName((String) params.get("name"));
-        result.setPrice(Double.parseDouble((String) params.get("price")));
-
-        return result;
+    public int delete(int id) {
+        return productDb.deleteRow(id);
     }
 }

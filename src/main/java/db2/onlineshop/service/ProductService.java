@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProductService {
-    List<Product> getItems();
 
-    int updateItem(Map<String, String> params);
+    List<Product> get();
 
-    int addItem(Map<String, String> params);
+    Product get(int id);
 
-    Product getItem(String key);
+    int update(Product product);
 
-    int removeItem(String key);
+    int add(Product product);
+
+    int delete(int id);
 }

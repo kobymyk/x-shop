@@ -2,96 +2,68 @@ package db2.onlineshop.web.controller;
 
 import db2.onlineshop.entity.Product;
 import db2.onlineshop.service.ProductService;
-import db2.onlineshop.web.templater.PageGenerator;
 
-import db2.onlineshop.web.utils.ParamConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ProductController {
-    private static final String KEY = "id";
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ProductService productService;
 
-    private final PageGenerator PAGE_GENERATOR = PageGenerator.instance();
-
     @RequestMapping(path = "/products", method = RequestMethod.GET)
-    @ResponseBody
-    public String allForGet() {
-        log.info("START:ProductController.allForGet");
-        List<Product> items = productService.getItems();
-        Map<String, Object> data = ParamConverter.fromList(items, "products");
-        String result = PAGE_GENERATOR.getPage("products", data);
-        log.info("END:ProductController.allForGet");
+    public String list(Model model) {
+        log.info("list:start");
+        List<Product> products = productService.get();
+        model.addAttribute("products", products);
 
-        return result;
+        return "productList.html";
     }
 
-    @RequestMapping(path = "/product-edit", method = RequestMethod.GET)
-    @ResponseBody
-    public String editForGet(@RequestParam(KEY) String id) {
-        log.info("START:ProductController.editForGet({})", id);
-        Object item = productService.getItem(id);
+    @RequestMapping(path = "/product/{id}", method = RequestMethod.GET)
+    public String edit(Model model, @PathVariable int id) {
+        log.info("edit:id={}", id);
+        Product product = productService.get(id);
+        model.addAttribute("product", product);
 
-        Map<String, Object> data = ParamConverter.fromObject(item, "product");
-        String result = PAGE_GENERATOR.getPage("product-edit", data);
-        log.info("END:ProductController.editForGet");
-
-        return result;
+        return "productEdit.html";
     }
 
-    @RequestMapping(path = "/product-edit", method = RequestMethod.POST)
-    public void editForPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("START:ProductController.editForPost");
-        Map<String, String[]> paramMap = request.getParameterMap();
-        Map<String, String> data = ParamConverter.fromParamMap(paramMap);
-        productService.updateItem(data);
-        log.info("END:ProductController.editForPost");
-
-        response.sendRedirect("products");
-    }
-
-    @RequestMapping(path = "/product-add", method = RequestMethod.GET)
-    @ResponseBody
-    public String addForGet() {
-        log.info("START:ProductController.addForGet");
-        String result = PAGE_GENERATOR.getPage("product-add", null);
-        log.info("END:ProductController.addForGet");
-
-        return result;
-    }
-    @RequestMapping(path = "/product-add", method = RequestMethod.POST)
-    //@ResponseBody not needed for redirect
-    public String addForPost(HttpServletRequest request) {
-        log.info("START:ProductController.addForPost");
-        Map<String, String[]> paramMap = request.getParameterMap();
-        Map<String, String> data = ParamConverter.fromParamMap(paramMap);
-        productService.addItem(data);
-        log.info("END:ProductController.addForPost");
+    @RequestMapping(path = "/product/edit", method = RequestMethod.POST)
+    public String edit(@ModelAttribute Product product) {
+        log.info("edit:product={}", product);
+        productService.update(product);
 
         return "redirect:/products";
     }
-    @RequestMapping(path = "/product-delete", method = RequestMethod.POST)
-    public String deleteForPost(@RequestParam(KEY) String id) {
-        log.info("START:ProductController.deleteForPost");
 
-        productService.removeItem(id);
-        log.info("END:ProductController.deleteForPost");
+    @RequestMapping(path = "/product/add", method = RequestMethod.GET)
+    public String add(Model model) {
+        log.info("add:start");
+        model.addAttribute("product", new Product());
+
+        return "productAdd.html";
+    }
+
+    @RequestMapping(path = "/product/add", method = RequestMethod.POST)
+    public String add(@ModelAttribute Product product) {
+        log.info("add:product={}", product);
+        productService.add(product);
+
+        return "redirect:/products";
+    }
+    @RequestMapping(path = "/product/delete/{id}", method = RequestMethod.POST)
+    public String delete(@PathVariable int id) {
+        log.info("delete:id={}", id);
+        productService.delete(id);
 
         return "redirect:/products";
     }

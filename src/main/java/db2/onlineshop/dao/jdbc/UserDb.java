@@ -3,13 +3,17 @@ package db2.onlineshop.dao.jdbc;
 import db2.onlineshop.dao.UserDao;
 import db2.onlineshop.dao.jdbc.mapper.impl.UserMapper;
 import db2.onlineshop.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDb implements UserDao {
+    @Autowired
     private DataSource dataSource;
 
     private static final String SELECT_ALL = "SELECT * FROM users";

@@ -2,6 +2,7 @@ package db2.onlineshop.security;
 
 import db2.onlineshop.service.UserService;
 import db2.onlineshop.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class SecurityService {
     // should be concurrent one
     private List<Session> sessionList = new ArrayList<>();
